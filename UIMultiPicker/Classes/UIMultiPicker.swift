@@ -1,12 +1,12 @@
 import UIKit
 
-@IBDesignable @objc
+@IBDesignable @objc 
 open class UIMultiPicker: UIControl {
     
     @objc
     public var options: [String] = ["One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten"] {
         didSet {
-            picker.reloadComponent(0)
+            picker.setNeedsLayout()
             sendActions(for: .valueChanged)
         }
     }
@@ -41,7 +41,7 @@ open class UIMultiPicker: UIControl {
 
 class UIMultiPickerView: UIPickerView, UIPickerViewDelegate, UIPickerViewDataSource
 {
-    weak var parent: UIMultiPicker! = nil
+    weak var parent: UIMultiPicker!
     
     var topTable: UITableView!
     var bottomTable: UITableView!
@@ -68,9 +68,9 @@ class UIMultiPickerView: UIPickerView, UIPickerViewDelegate, UIPickerViewDataSou
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        
+  
         layer.borderWidth = 0 // Main view rounded border
-        
+
         // Component borders
         subviews.forEach {
             $0.layer.borderWidth = 0
@@ -115,7 +115,7 @@ class UIMultiPickerView: UIPickerView, UIPickerViewDelegate, UIPickerViewDataSou
     }
 }
 
-class TableViewProxy : NSObject, UITableViewDataSource
+class TableViewProxy: NSObject, UITableViewDataSource
 {
     weak var multiPicker: UIMultiPicker!
     let dataSource: UITableViewDataSource
@@ -145,7 +145,8 @@ class TableViewProxy : NSObject, UITableViewDataSource
         return cell
     }
     
-    @objc func handleCellTap(sender: UITapGestureRecognizer) {
+    @objc 
+    func handleCellTap(sender: UITapGestureRecognizer) {
         let cell = sender.view as! UITableViewCell
         let row = cell.tag
         
@@ -156,7 +157,6 @@ class TableViewProxy : NSObject, UITableViewDataSource
         }
     }
     
-    // redirect
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return dataSource.tableView(tableView, numberOfRowsInSection: section)
     }
@@ -167,8 +167,7 @@ class CenterTableViewProxy: TableViewProxy
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = super.tableView(tableView, cellForRowAt: indexPath)
         let label = cell.subviews[1] as! UILabel
-        
-        label.font = label.font.withSize(21) // Fix center item font size
+        label.font = label.font.withSize(21) // Match center item's font size to top & bottom items
         return cell
     }
 }
