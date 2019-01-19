@@ -1,6 +1,6 @@
-![UIMultiPicker](Media/UIMultiPicker.png)
+![UIMultiPicker](https://raw.github.com/aselivanov/UIMultiPickerDemo/master/media/UIMultiPicker.png)
 
-[![CI Status](https://img.shields.io/travis/aselivanov/UIMultiPicker.svg?style=flat)](https://travis-ci.org/aselivanov/UIMultiPicker)
+[![CI Status](https://img.shields.io/travis/aselivanov/UIMultiPickerDemo.svg?style=flat)](https://travis-ci.org/aselivanov/UIMultiPickerDemo)
 [![Version](https://img.shields.io/cocoapods/v/UIMultiPicker.svg?style=flat)](https://cocoapods.org/pods/UIMultiPicker)
 [![License](https://img.shields.io/cocoapods/l/UIMultiPicker.svg?style=flat)](https://cocoapods.org/pods/UIMultiPicker)
 [![Platform](https://img.shields.io/cocoapods/p/UIMultiPicker.svg?style=flat)](https://cocoapods.org/pods/UIMultiPicker)
@@ -12,7 +12,7 @@ UIMultiPicker subclasses `UIControl` and sends `.valueChanged` action when any v
 
 ## Example
 
-To run the example project, clone the repo, and run `pod install` from the Example directory first.
+Here is a [demo](https://github.com/aselivanov/UIMultiPickerDemo) Xcode project.
 
 ## Installation
 
