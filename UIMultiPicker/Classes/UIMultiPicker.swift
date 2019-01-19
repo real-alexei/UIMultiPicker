@@ -1,8 +1,9 @@
 import UIKit
 
-@IBDesignable
-public class UIMultiPicker : UIControl {
+@IBDesignable @objc
+open class UIMultiPicker: UIControl {
     
+    @objc
     public var options: [String] = ["One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten"] {
         didSet {
             picker.reloadComponent(0)
@@ -10,6 +11,7 @@ public class UIMultiPicker : UIControl {
         }
     }
     
+    @objc
     public var selectedIndexes: [Int] = [] {
         didSet {
             sendActions(for: .valueChanged)
