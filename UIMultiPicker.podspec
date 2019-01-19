@@ -6,6 +6,7 @@ Pod::Spec.new do |s|
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'Aleks Selivanov' => 'aleks.selivanov@yahoo.com' }
   s.source           = { :git => 'https://github.com/aselivanov/UIMultiPicker.git', :tag => s.version.to_s }
+  s.swift_version    = '4.2'
 
   s.ios.deployment_target = '8.0'
   
