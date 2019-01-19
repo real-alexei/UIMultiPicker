@@ -1,0 +1,16 @@
+PODS:
+  - UIMultiPicker (0.1.0)
+
+DEPENDENCIES:
+  - UIMultiPicker (from `../`)
+
+EXTERNAL SOURCES:
+  UIMultiPicker:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  UIMultiPicker: b74ef11b3bd043228fcb4b4c448fead5baaf3bff
+
+PODFILE CHECKSUM: 0088f4dadeefaa7f7e0e326943bf66cfb047d2df
+
+COCOAPODS: 1.5.3
