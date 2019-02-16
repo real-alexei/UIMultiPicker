@@ -1,21 +1,42 @@
 import UIKit
 
-@IBDesignable @objc 
+@IBDesignable 
 open class UIMultiPicker: UIControl {
     
     @objc
     public var options: [String] = ["One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten"] {
         didSet {
-            picker.setNeedsLayout()
             sendActions(for: .valueChanged)
+            selectedIndexes = []
         }
     }
     
     @objc
-    public var selectedIndexes: [Int] = [] {
+    public var selectedIndexes: [Int] = [0, 2, 4] {
         didSet {
             sendActions(for: .valueChanged)
             picker.reloadComponent(0)
+        }
+    }
+
+    @objc
+    public var font: UIFont = UIFont.systemFont(ofSize: 21) {
+        didSet {
+            picker.setNeedsLayout()
+        }
+    }
+    
+    @objc
+    public var textAlign: NSTextAlignment = .center {
+        didSet {
+            picker.setNeedsLayout()
+        }
+    }
+    
+    @IBInspectable
+    public var color: UIColor = UIColor.black {
+        didSet {
+            picker.setNeedsLayout()
         }
     }
     
@@ -42,14 +63,7 @@ open class UIMultiPicker: UIControl {
 class UIMultiPickerView: UIPickerView, UIPickerViewDelegate, UIPickerViewDataSource
 {
     weak var parent: UIMultiPicker!
-    
-    var topTable: UITableView!
-    var bottomTable: UITableView!
-    var centerTable: UITableView!
-    
-    var topTableProxy: TableViewProxy!
-    var bottomTableProxy: TableViewProxy!
-    var centerTableProxy: CenterTableViewProxy!
+    var proxy: TableViewProxy!
     
     public override init(frame: CGRect) {
         super.init(frame: frame)
@@ -77,28 +91,17 @@ class UIMultiPickerView: UIPickerView, UIPickerViewDelegate, UIPickerViewDataSou
             $0.isHidden = $0.frame.height <= 1.0
         }
         
-        let topTable = (subviews[0].subviews[0].subviews[0].subviews[0] as! UITableView)
-        if (topTable != self.topTable) {
-            self.topTable = topTable
-            self.topTableProxy = TableViewProxy(dataSource: topTable.dataSource!)
-            self.topTableProxy.multiPicker = self.parent
-            topTable.dataSource = self.topTableProxy
-        }
-        
-        let bottomTable = (subviews[0].subviews[0].subviews[1].subviews[0] as! UITableView)
-        if (bottomTable != self.bottomTable) {
-            self.bottomTable = bottomTable
-            self.bottomTableProxy = TableViewProxy(dataSource: bottomTable.dataSource!)
-            self.bottomTableProxy.multiPicker = self.parent
-            bottomTable.dataSource = self.bottomTableProxy
-        }
-        
-        let centerTable = (subviews[0].subviews[0].subviews[2].subviews[0] as! UITableView)
-        if centerTable != self.centerTable {
-            self.centerTable = centerTable
-            self.centerTableProxy = CenterTableViewProxy(dataSource: centerTable.dataSource!)
-            self.centerTableProxy.multiPicker = self.parent
-            centerTable.dataSource = self.centerTableProxy
+        let tables = [
+            subviews[0].subviews[0].subviews[0].subviews[0] as! UITableView, // top
+            subviews[0].subviews[0].subviews[1].subviews[0] as! UITableView, // bottom
+            subviews[0].subviews[0].subviews[2].subviews[0] as! UITableView, // center
+        ]
+        if tables[0].dataSource !== proxy {
+            proxy = TableViewProxy(dataSource: tables[0].dataSource!)
+            proxy.multiPicker = self.parent
+            for table in tables {
+                table.dataSource = proxy
+            }
         }
     }
     
@@ -113,13 +116,16 @@ class UIMultiPickerView: UIPickerView, UIPickerViewDelegate, UIPickerViewDataSou
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         return parent.options[row]
     }
+    
+    func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
+        return parent.font.pointSize + 19
+    }
 }
 
 class TableViewProxy: NSObject, UITableViewDataSource
 {
     weak var multiPicker: UIMultiPicker!
     let dataSource: UITableViewDataSource
-    var defaultLabelColor: UIColor!
     
     init(dataSource: UITableViewDataSource) {
         self.dataSource = dataSource
@@ -128,20 +134,18 @@ class TableViewProxy: NSObject, UITableViewDataSource
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = dataSource.tableView(tableView, cellForRowAt: indexPath)
         let label = cell.subviews[1] as! UILabel
-        label.alpha = 1
-        
-        if (defaultLabelColor == nil) {
-            defaultLabelColor = label.textColor
-        }
         
         let tap = cell.gestureRecognizers![0] as! UITapGestureRecognizer
         cell.tag = indexPath.row
-        tap.removeTarget(self, action: #selector(self.handleCellTap(sender:)))
         tap.addTarget(self, action: #selector(self.handleCellTap))
         
-        if multiPicker.selectedIndexes.contains(indexPath.row) {
-            label.textColor = UIColor(red: 0, green: 0.5, blue: 1, alpha: 1)
-        }
+        label.alpha = 1
+        label.font = multiPicker.font
+        label.textAlignment = multiPicker.textAlign
+        label.textColor = multiPicker.selectedIndexes.contains(indexPath.row) ?
+            multiPicker.tintColor :
+            multiPicker.color
+        
         return cell
     }
     
@@ -159,15 +163,5 @@ class TableViewProxy: NSObject, UITableViewDataSource
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return dataSource.tableView(tableView, numberOfRowsInSection: section)
-    }
-}
-
-class CenterTableViewProxy: TableViewProxy
-{
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = super.tableView(tableView, cellForRowAt: indexPath)
-        let label = cell.subviews[1] as! UILabel
-        label.font = label.font.withSize(21) // Match center item's font size to top & bottom items
-        return cell
     }
 }
