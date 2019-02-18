@@ -55,7 +55,7 @@ List of options.
 
 ### **`selectedIndexes: [Int]`**
 
-Bi-directional selection model.
+Selected items indexes, reactive to user interactions.
 
 ### **`color: UIColor`**
 

@@ -4,17 +4,15 @@ import UIKit
 open class UIMultiPicker: UIControl {
     
     @objc
-    public var options: [String] = ["One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten"] {
+    public var options: [String] = [] {
         didSet {
-            sendActions(for: .valueChanged)
             selectedIndexes = []
         }
     }
     
     @objc
-    public var selectedIndexes: [Int] = [0, 2, 4] {
+    public var selectedIndexes: [Int] = [] {
         didSet {
-            sendActions(for: .valueChanged)
             picker.reloadComponent(0)
         }
     }
@@ -159,6 +157,7 @@ class TableViewProxy: NSObject, UITableViewDataSource
         } else {
             multiPicker.selectedIndexes += [row]
         }
+        multiPicker.sendActions(for: .valueChanged)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
