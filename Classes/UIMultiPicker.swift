@@ -38,6 +38,11 @@ open class UIMultiPicker: UIControl {
         }
     }
     
+    @objc
+    public func highlight(_ at: Int, animated: Bool = true) {
+        picker.selectRow(at, inComponent: 0, animated: animated)
+    }
+    
     private let picker = UIMultiPickerView()
     
     public override init(frame: CGRect) {

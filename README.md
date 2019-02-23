@@ -39,6 +39,8 @@ class ViewController: UIViewController {
 
         // Add selection listener
         tastesPicker.addTarget(self, action: #selector(ViewController.selected(_:)), for: .valueChanged)
+
+        tastesPicker.highlight(2, animated: false) // centering "Bitter"
     }
     
     @objc func selected(_ sender: UIMultiPicker) {
