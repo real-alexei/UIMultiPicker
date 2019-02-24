@@ -6,7 +6,7 @@ open class UIMultiPicker: UIControl {
     @objc
     public var options: [String] = [] {
         didSet {
-            selectedIndexes = []
+            picker.reloadComponent(0)
         }
     }
     
