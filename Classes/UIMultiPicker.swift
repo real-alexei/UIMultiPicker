@@ -38,6 +38,13 @@ open class UIMultiPicker: UIControl {
         }
     }
     
+    @IBInspectable
+    public var rowHeight = 44 {
+        didSet {
+            picker.setNeedsLayout()
+        }
+    }
+    
     @objc
     public func highlight(_ at: Int, animated: Bool = true) {
         picker.selectRow(at, inComponent: 0, animated: animated)
@@ -121,7 +128,7 @@ class UIMultiPickerView: UIPickerView, UIPickerViewDelegate, UIPickerViewDataSou
     }
     
     func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
-        return parent.font.pointSize + 19
+        return CGFloat(parent.rowHeight)
     }
 }
 
