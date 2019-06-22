@@ -39,7 +39,7 @@ open class UIMultiPicker: UIControl {
     }
     
     @IBInspectable
-    public var rowHeight = 44 {
+    public var rowHeight: CGFloat = 44 {
         didSet {
             picker.setNeedsLayout()
         }
@@ -128,7 +128,7 @@ class UIMultiPickerView: UIPickerView, UIPickerViewDelegate, UIPickerViewDataSou
     }
     
     func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
-        return CGFloat(parent.rowHeight)
+        return parent.rowHeight
     }
 }
 
