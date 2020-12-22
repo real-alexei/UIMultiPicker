@@ -156,7 +156,8 @@ class TableViewProxy: NSObject, UITableViewDataSource
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = dataSource.tableView(tableView, cellForRowAt: indexPath)
-        let label = cell.subviews[1] as! UILabel
+        let label = cell.subviews.first(where: { (temp) -> Bool in
+            return temp is UILabel}) as! UILabel
 
         let tap = cell.gestureRecognizers![0] as! UITapGestureRecognizer
         cell.tag = indexPath.row
