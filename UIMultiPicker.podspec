@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'UIMultiPicker'
-  s.version          = '0.6.0'
+  s.version          = '0.6.1'
   s.summary          = 'UIPickerView with multiple selection support.'
   s.homepage         = 'https://cocoapods.org/pods/UIMultiPicker'
   s.license          = { :type => 'MIT' }
