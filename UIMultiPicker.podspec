@@ -4,7 +4,7 @@ Pod::Spec.new do |s|
   s.summary          = 'UIPickerView with multiple selection support.'
   s.homepage         = 'https://cocoapods.org/pods/UIMultiPicker'
   s.license          = { :type => 'MIT' }
-  s.author           = { 'Alexei Selivanov' => 'alexei@slowmotion.io' }
+  s.author           = { 'Alexei Selivanov' => 'alexei.selivanov@gmail.com' }
   s.source           = { :git => 'https://github.com/aselivanov/UIMultiPicker.git', :tag => s.version.to_s }
   s.swift_version    = '4.2'
 
