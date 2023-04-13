@@ -30,7 +30,21 @@ open class UIMultiPicker: UIControl {
             picker.setNeedsLayout()
         }
     }
-
+    
+    @objc
+    public var showsCheck: Bool = true {
+        didSet {
+            picker.setNeedsLayout()
+        }
+    }
+    
+    @objc
+    public var checkSpacing: CGFloat = 20.0 {
+        didSet {
+            picker.setNeedsLayout()
+        }
+    }
+    
     @IBInspectable
     public var color: UIColor = UIColor.black {
         didSet {
@@ -81,6 +95,7 @@ open class UIMultiPicker: UIControl {
     fileprivate static let A: CGFloat = 0.001138663967611336
     fileprivate static let B: CGFloat = 1.3481781376518218
     fileprivate static let C: CGFloat = -64.72064777327921
+    fileprivate static let checkString: String = "✓"
 }
 
 class UIMultiPickerView: UIPickerView, UIPickerViewDelegate, UIPickerViewDataSource
@@ -168,8 +183,41 @@ class TableViewProxy: NSObject, UITableViewDataSource
         label.textColor = multiPicker.selectedIndexes.contains(indexPath.row) ?
             multiPicker.tintColor :
             multiPicker.color
+        
+        if #available(iOS 9.0, *) {
+            manageCheck(on: cell, shown: multiPicker.showsCheck && multiPicker.selectedIndexes.contains(indexPath.row))
+        }
 
         return cell
+    }
+    
+    @available(iOS 9.0, *)
+    private func manageCheck(on cell: UITableViewCell, shown: Bool) {
+        if let existingCheck = (cell.subviews.filter({
+            $0 is UILabel
+        }) as? [UILabel])?.first(where: {
+            $0.text == UIMultiPicker.checkString
+        }) as? UILabel {
+            existingCheck.isHidden = !shown
+        } else {
+            let check = UILabel()
+            check.translatesAutoresizingMaskIntoConstraints = false
+            check.text = UIMultiPicker.checkString
+            check.font = multiPicker.font
+            check.textColor = multiPicker.tintColor
+            
+            let isRtl = UIView.userInterfaceLayoutDirection(for: UIView().semanticContentAttribute) == .rightToLeft
+            check.textAlignment = isRtl ? .right : .left
+            check.transform = isRtl ? .init(scaleX: -1, y: 1) : .identity
+            
+            check.isHidden = !shown
+            
+            cell.addSubview(check)
+            NSLayoutConstraint.activate([
+                check.leadingAnchor.constraint(equalTo: cell.leadingAnchor, constant: multiPicker.checkSpacing),
+                check.centerYAnchor.constraint(equalTo: cell.centerYAnchor)
+            ])
+        }
     }
 
     @objc
